@@ -1,5 +1,6 @@
 # Paw-Lab
 Welcome to Midnight Paw Club's official experimental zone.
+🐱♾️🐳
 
 ## 🐱 项目预览
 ### 🐾 `catbar.py`
