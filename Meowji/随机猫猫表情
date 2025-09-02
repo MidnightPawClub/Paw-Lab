@@ -1,0 +1,65 @@
+import random
+import os
+
+meow_expressions={
+#字典dict类型.语法是：{ key1: value1, key2: value2, ... }
+#key 是字符串，value 可以是任意类型
+    #key（键）是 `"happy"`, `"angry"` 等 → 表示“情绪”
+    #value（值） 是一个 列表 list → 表示这一类情绪对应的猫猫表情
+    "happy": ["😺", "🐱", "(*^ω^*)"],
+    "angry": ["😾", "(=｀ω´=)", "ฅ^•ﻌ•^ฅ"],
+    "sad":   ["😿", "(；ω；)", "(´•̥̥̥ω•̥̥̥`)"],
+    "evil":  ["😼", "(*ΦωΦ*)", "(=ↀωↀ=)✧"]
+}
+meow_sayings = {
+    "happy": "今天是轻飘飘的毛绒绒日子喵~",
+    "angry": "不准摸尾巴！！喵！",
+    "sad":   "……想一个猫待着……",
+    "evil":  "哼哼哼，猫门的反击开始了喵！"
+}
+
+#给字典添加键值对：
+    # 如果 key **不存在**：就创建一个新键（例如 `"tired"`）
+    # 如果 key **已存在**：就会更新这个 key 对应的值（替换旧值）
+# key：必须写在方括号 [] 里——如果 key 是字符串，要加引号：["name"]；如果 key 是变量，比如 k = "name"，那就写成 [k]
+# value：你想赋值什么都可以，可以是：字符串："喵"；列表：["喵1", "喵2"]；数字：42；字典：{"inner": "喵"}；函数、类、对象……都可以！
+meow_expressions["tired"] = ["(＝ω＝.)", "（=。=）", "(=①ω①=)"] 
+meow_expressions["shy"] = ["(,,・ω・,,)", "(=^-ω-^=)", "（ฅ´ω`ฅ）"]
+meow_sayings["tired"] = "你触发了喵之怒火——ヾ(｡｀Д´｡)ﾉ彡（抓抓抓）"
+meow_sayings["shy"] = "喵喵喵你竟然知道了我的小秘密！不害臊！"
+
+
+def meowji():
+    """根据用户输入的情绪，随机返回对应猫猫表情和喵言喵语"""
+    print("欢迎来到猫猫心情机！你可以输入以下情绪：")
+    print(", ".join(meow_expressions.keys()))
+    #.join()是字符串的一个方法，作用是把列表里的多个元素连接成一个字符串
+        #语法："连接符".join(列表)
+        #例：print(" / ".join(["喵1", "喵2", "喵3"]))   输出：喵1 / 喵2 / 喵3
+    #.keys() 是 Python 字典（dict）的一个方法，用来获取这个字典的所有 key（键）
+        #效果：返回的是dict_keys类型的对象，可以被当成列表用，但不是list。——dict_keys(['happy', 'angry', 'sad'])
+        #可以通过 list() 转换成真·列表——list(meow_expressions.keys())
+        #同理：
+            #.values()	获取所有 value	dict_values
+            #.items()	获取所有 key-value 对	dict_items（每项是一个 (key, value) 元组）
+    emotion = input("今天的喵喵心情是(=・ω・=)？")
+    os.system('cls' if os.name=='nt' else 'clear')
+    if emotion in meow_expressions:
+     #判断 key 是否存在（`in` 语法默认只对 **key** 起作用，不会去管 value）
+        face = random.choice(meow_expressions.get(emotion,["(=・ω・=)？"]))  #相当于random.choice(meow_expressions[emotion])←直接访问（key不存在时报错KeyError)
+        saying = meow_sayings.get(emotion, "")
+        #.get() 是 Python 字典（dict）的方法，用来*安全地*获取某个 key 对应的值。
+        #.get() 本来就是可以接受两个参数的函数 —— 它设计的本意就是如果 key 存在，返回 key 对应的值；如果 key 不存在，返回你提供的默认值。
+        #官方签名 : dict.get(key, default=None)
+            #第一个参数是你要查的 key
+            #第二个参数是可选的默认值 default,如果不写，默认就是 None,如果写了，比如 ""，那就返回这个值
+            #def get_from_dict(dictionary, key, default=None):  if key in dictionary:   return dictionary[key]  else:   return default
+        return f"{face}  {saying}"
+    else:
+    #处理无效输入
+        saying = meow_sayings.get(emotion, f"喵喵语穷了，不知道怎么表达 {emotion} 这种情绪")
+        return f"{saying}"
+
+#后期更新方向：图形化界面（用 `tkinter` 做“点一下按钮显示表情”的猫猫 app）；网页版 meowji（用 Flask / Gradio 变成小网页）；存储用户历史心情（用文件或 json 记录）
+
+print(meowji())
